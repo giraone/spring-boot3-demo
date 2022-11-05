@@ -1,0 +1,12 @@
+management:
+  endpoints:
+    web:
+      exposure:
+        # we want all endpoint
+        include: '*'
+        # except env - passwords!
+        exclude: env
+    enabled-by-default: true
+  endpoint:
+    health:
+      show-details: always
