@@ -1,4 +1,4 @@
-# Spring Boot 2 Demo
+# Spring Boot 3 Features Demo
 
 Basically the code from
 [Spring Tips: the road to Spring Boot 3: Spring Framework 6](https://spring.io/blog/2022/10/26/spring-tips-the-road-to-spring-boot-3-spring-framework-6).
@@ -12,19 +12,19 @@ Basically the code from
 
 ## Content
 
-There is on endpoint `/calculate/{input1}[?input2={input2}]` calculating the fibonacci value directly for `input1`
-and optionally and indirectly via a REST call to `/calculate/{input}` to the same service.
+There is one endpoint `/calculate/{input1}[?input2={input2}]` calculating the *fibonacci* value directly for `input1`
+and also indirectly via a REST call to endpoint `/calculate2/{input}` to the same service.
 
 ## Tests from Command Line
 
-ProblemDetail
+### ProblemDetail
 
 ```shell
 $ curl http://localhost:8080/calculate/0
 {"type":"about:blank","title":"Bad Request","status":400,"detail":"PathVariable input1 must be between [1,30]","instance":"/calculate/0"}
 ```
 
-Calculations and interface based `WebClient`
+### Calculations and interface based `WebClient`
 
 ```shell
 curl http://localhost:8080/calculate/10
@@ -34,7 +34,7 @@ curl http://localhost:8080/calculate/10?input2=10
 {"ok":true,"value1":55,"value2":21}
 ```
 
-Metrics and Observation
+### Metrics and Observation
 
 ```shell
 curl http://localhost:8080/actuator/metrics | jq
@@ -54,6 +54,8 @@ curl http://localhost:8080/actuator/metrics | jq
   ]
 }
 ```
+
+Using the "demo.calculate" metrics endpoint
 
 ```shell
 curl http://localhost:8080/actuator/metrics/demo.calculate | jq
