@@ -26,7 +26,7 @@ services:
     ports:
       - "3100:3100" # log ingest
     environment:
-      - JAEGER_AGENT_HOST=tempo
+      - JAEGER_AGENT_HOST=tempo-sb3
       - JAEGER_ENDPOINT=http://tempo-sb3:14268/api/traces # send traces to Tempo
       - JAEGER_SAMPLER_TYPE=const
       - JAEGER_SAMPLER_PARAM=1
