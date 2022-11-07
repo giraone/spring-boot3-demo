@@ -15,16 +15,20 @@ public class Calculations {
 
     public int fibonacci(int input) {
 
-        final int ret;
-        if (input < 3) {
-            ret = 1;
-        }
-        else {
-            ret = fibonacci(input - 1) + fibonacci(input - 2);
-        }
+        final int ret = fibonacciInternal(input);
         Observation.createNotStarted("demo.calculate", this.observationRegistry)
             .lowCardinalityKeyValue("input", Integer.toString(input))
             .observe(() -> ret);
         return ret;
+    }
+
+    private int fibonacciInternal(int input) {
+
+        if (input < 3) {
+            return 1;
+        }
+        else {
+            return fibonacciInternal(input - 1) + fibonacciInternal(input - 2);
+        }
     }
 }

@@ -35,12 +35,11 @@ public class ServiceApplication {
 
     @Bean
     HttpServiceProxyFactory httpServiceProxyFactory(WebClient.Builder builder) {
-
         String host = "127.0.0.1";
         int port = 8080;
-        if (applicationProperties.getService2() != null) {
-            port = applicationProperties.getService2().port();
-            host = applicationProperties.getService2().host();
+        if (applicationProperties.getClient() != null) {
+            port = applicationProperties.getClient().getPort();
+            host = applicationProperties.getClient().getHost();
         }
         if (port == 0) {
             port = 8080;
