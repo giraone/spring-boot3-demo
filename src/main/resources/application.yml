@@ -1,12 +1,26 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: demo
+
+# traceID and spanId are predefined MDC keys - we want the logs to include them
+logging.pattern.level: '%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]'
+
 management:
   endpoints:
     web:
       exposure:
-        # we want all endpoint
-        include: '*'
-        # except env - passwords!
-        exclude: env
-    enabled-by-default: true
-  endpoint:
-    health:
-      show-details: always
+        include: prometheus
+  tracing:
+    sampling:
+      # All traces should be sent to latency analysis tool
+      probability: 1.0
+
+application:
+  show-config-on-startup: true
+  # URL for second service
+  service2:
+    host: 127.0.0.1
+    port: 8080
