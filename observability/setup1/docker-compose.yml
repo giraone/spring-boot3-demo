@@ -1,0 +1,95 @@
+version: "3.5"
+
+services:
+  tempo:
+    image: grafana/tempo
+    hostname: tempo-sb3
+    container_name: tempo-sb3
+    command: [ "-config.file=/etc/tempo.yaml" ]
+    networks:
+      - sb3
+    volumes:
+      - ./docker/tempo/tempo-local.yaml:/etc/tempo.yaml:ro
+      - ./tempo-data:/tmp/tempo
+    ports:
+      - "14268" # jaeger ingest
+      - "9411:9411" # zipkin
+      - "3200:3200" # grafana and admin API
+
+  loki:
+    image: grafana/loki
+    hostname: loki-sb3
+    container_name: loki-sb3
+    command: [ "-config.file=/etc/loki/local-config.yaml" ]
+    networks:
+      - sb3
+    ports:
+      - "3100:3100" # log ingest
+    environment:
+      - JAEGER_AGENT_HOST=tempo
+      - JAEGER_ENDPOINT=http://tempo-sb3:14268/api/traces # send traces to Tempo
+      - JAEGER_SAMPLER_TYPE=const
+      - JAEGER_SAMPLER_PARAM=1
+
+  prometheus:
+    image: prom/prometheus
+    hostname: prometheus-sb3
+    container_name: prometheus-sb3
+    networks:
+      - sb3
+    command:
+      - --enable-feature=exemplar-storage
+      - --config.file=/etc/prometheus/prometheus.yml
+    volumes:
+      - ./docker/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    ports:
+      - "9090:9090"
+
+  grafana:
+    image: grafana/grafana
+    hostname: grafana-sb3
+    container_name: grafana-sb3
+    networks:
+      - sb3
+    volumes:
+      - ./docker/grafana/provisioning/datasources:/etc/grafana/provisioning/datasources:ro
+      - ./docker/grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards:ro
+    environment:
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+      - GF_AUTH_DISABLE_LOGIN_FORM=true
+    ports:
+      - "3000:3000"
+
+  demo1:
+    image: localhost/spring-boot3-demo
+    hostname: demo1-sb3
+    container_name: demo1-sb3
+    networks:
+      - sb3
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_APPLICATION_NAME=demo1 # the name is shown in the log
+      - SPRING_PROFILES_ACTIVE=setup1
+      - APPLICATION_SERVICE2_HOST=demo2-sb3
+      # to receive some logs (each request)
+      - LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_WEB_FILTER_COMMONS_REQUEST_LOGGING_FILTER=DEBUG
+
+  demo2:
+    image: localhost/spring-boot3-demo
+    hostname: demo2-sb3
+    container_name: demo2-sb3
+    networks:
+      - sb3
+    ports:
+      - "8081:8080"
+    environment:
+      - SPRING_APPLICATION_NAME=demo2 # the name is shown in the log
+      - SPRING_PROFILES_ACTIVE=setup1
+      - APPLICATION_SERVICE2_HOST=demo2-sb3
+      # to receive some logs (each request)
+      - LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_WEB_FILTER_COMMONS_REQUEST_LOGGING_FILTER=DEBUG
+
+networks:
+  sb3:
