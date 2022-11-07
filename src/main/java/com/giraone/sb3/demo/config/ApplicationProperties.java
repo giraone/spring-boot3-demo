@@ -16,7 +16,7 @@ public class ApplicationProperties {
     /** Log the configuration to the log on startup */
     private boolean showConfigOnStartup;
     /** URL (host/port) for second service */
-    private RemoteService service2 = new RemoteService();
+    private RemoteService client = new RemoteService();
 
     public boolean isShowConfigOnStartup() {
         return showConfigOnStartup;
@@ -26,19 +26,19 @@ public class ApplicationProperties {
         this.showConfigOnStartup = showConfigOnStartup;
     }
 
-    public RemoteService getService2() {
-        return service2;
+    public RemoteService getClient() {
+        return client;
     }
 
-    public void setService2(RemoteService service2) {
-        this.service2 = service2;
+    public void setClient(RemoteService client) {
+        this.client = client;
     }
 
     @Override
     public String toString() {
         return "ApplicationProperties{" +
             "showConfigOnStartup=" + showConfigOnStartup +
-            ", service2=" + service2 +
+            ", client=" + client +
             '}';
     }
 }

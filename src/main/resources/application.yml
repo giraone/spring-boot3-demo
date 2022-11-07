@@ -5,6 +5,13 @@ spring:
   application:
     name: demo
 
+logging:
+  level:
+    ROOT: WARN
+    com.giraone.sb3.demo: INFO
+    # To have some logs
+    org.springframework.web.filter.CommonsRequestLoggingFilter: DEBUG
+
 # traceID and spanId are predefined MDC keys - we want the logs to include them
 logging.pattern.level: '%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]'
 
@@ -12,7 +19,10 @@ management:
   endpoints:
     web:
       exposure:
-        include: prometheus
+        include: 'prometheus,loggers,metrics'
+  endpoint:
+    loggers:
+      enabled: true
   tracing:
     sampling:
       # All traces should be sent to latency analysis tool
@@ -21,6 +31,6 @@ management:
 application:
   show-config-on-startup: true
   # URL for second service
-  service2:
+  client:
     host: 127.0.0.1
     port: 8080

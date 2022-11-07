@@ -91,6 +91,15 @@ curl http://localhost:8080/actuator/metrics/demo.calculate | jq
 }
 ``` 
 
+## Test locally
+
+- Run Service 1 using the environment variables
+  `SERVER_PORT=8080;SPRING_APPLICATION_NAME=demo1;APPLICATION_CLIENT_PORT=8081`
+- Run Service 2 using the environment variables
+  `SERVER_PORT=8081;SPRING_APPLICATION_NAME=demo2;APPLICATION_CLIENT_PORT=8080`
+
+With the setup, the service can call each other.
+
 # Observability - Metrics, Tracing, Logs)
 
 ## Setup 1
@@ -224,11 +233,5 @@ Grafana Logging (LOKI)
 - MDC https://github.com/open-telemetry/opentelemetry-java-instrumentation
 - otel in docker/docker-compose https://github.com/open-telemetry/opentelemetry-java-instrumentation
 
-Spring Boot 3
-- Micrometer Tracing ersetzt spring-cloud-sleuth
-- Damit sollte auch der "brave" Tracer Geschichte sein
-- Das neue Micrometer System basiert bzgl. Header-Propagation auf der https://www.w3.org/TR/trace-context/ Spec. (traceparent und tracestate HTTP Header)
-- Sichtbare "aktive" Basis im Code ist das Observation API (ObservationHandler, ObservationRegistry). Geht auch über Annotationen (@Observable), so ähnlich wie früher @Timed
-- Siehe https://spring.io/blog/2022/10/12/observability-with-spring-boot-3
 
 
