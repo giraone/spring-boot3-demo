@@ -106,6 +106,8 @@ With the setup, the service can call each other.
 
 See https://spring.io/blog/2022/10/12/observability-with-spring-boot-3
 
+Hint for Grafana: the setup allows write access and is editable!
+
 ### Client Instrumentation
 
 How is the Java Spring Boot 3 Application instrumented and where are the changes located?
@@ -225,13 +227,6 @@ Grafana Tracing (Tempo)
 Grafana Logging (LOKI)
 
 ![Grafana Logging (LOKI)](docs/images/setup1/grafana-loki.png)
-
----- 
-
-# What is good to know
-
-- MDC https://github.com/open-telemetry/opentelemetry-java-instrumentation
-- otel in docker/docker-compose https://github.com/open-telemetry/opentelemetry-java-instrumentation
 
 
 
