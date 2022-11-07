@@ -5,7 +5,7 @@ services:
     image: grafana/tempo
     hostname: tempo-sb3
     container_name: tempo-sb3
-    command: [ "-config.file=/etc/tempo.yaml" ]
+    command: [ "-search.enabled=true", "-config.file=/etc/tempo.yaml" ]
     networks:
       - sb3
     volumes:
@@ -52,8 +52,9 @@ services:
     networks:
       - sb3
     volumes:
-      - ./docker/grafana/provisioning/datasources:/etc/grafana/provisioning/datasources:ro
-      - ./docker/grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards:ro
+      - ./docker/grafana/grafana.ini:/etc/grafana/grafana.ini:ro
+      - ./docker/grafana/provisioning/datasources:/etc/grafana/provisioning/datasources:rw
+      - ./docker/grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards:rw
     environment:
       - GF_AUTH_ANONYMOUS_ENABLED=true
       - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
