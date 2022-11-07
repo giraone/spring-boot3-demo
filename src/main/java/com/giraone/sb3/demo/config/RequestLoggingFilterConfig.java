@@ -1,15 +1,15 @@
 package com.giraone.sb3.demo.config;
 
+import com.giraone.sb3.demo.controller.filter.SimpleRequestLoggingFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.filter.CommonsRequestLoggingFilter;
 
 @Configuration
 public class RequestLoggingFilterConfig {
 
     @Bean
-    public CommonsRequestLoggingFilter logFilter() {
-        CommonsRequestLoggingFilter filter = new CommonsRequestLoggingFilter();
+    public SimpleRequestLoggingFilter logFilter() {
+        SimpleRequestLoggingFilter filter = new SimpleRequestLoggingFilter();
         filter.setIncludeQueryString(true);
         filter.setIncludePayload(false);
         filter.setMaxPayloadLength(1000);

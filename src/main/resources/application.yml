@@ -10,7 +10,7 @@ logging:
     ROOT: WARN
     com.giraone.sb3.demo: INFO
     # To have some logs
-    org.springframework.web.filter.CommonsRequestLoggingFilter: DEBUG
+    com.giraone.sb3.demo.controller.filter.SimpleRequestLoggingFilter: DEBUG
 
 # traceID and spanId are predefined MDC keys - we want the logs to include them
 logging.pattern.level: '%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]'
