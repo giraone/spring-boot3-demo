@@ -23,6 +23,7 @@ public class Calculations {
             ret = fibonacci(input - 1) + fibonacci(input - 2);
         }
         Observation.createNotStarted("demo.calculate", this.observationRegistry)
+            .lowCardinalityKeyValue("input", Integer.toString(input))
             .observe(() -> ret);
         return ret;
     }
