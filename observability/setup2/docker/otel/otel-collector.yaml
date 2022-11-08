@@ -1,0 +1,33 @@
+receivers:
+  otlp:
+    protocols:
+      grpc:
+      http:
+
+processors:
+  batch:
+
+exporters:
+
+#  prometheus:
+#    endpoint: "prometheus-sb3:9090"
+  logging:
+    logLevel: debug
+
+extensions:
+  health_check:
+#    port: 13133 # the default port
+
+service:
+  pipelines:
+    metrics:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [logging]
+    traces:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [logging]
+
+  # we want a health check
+  extensions: [health_check]

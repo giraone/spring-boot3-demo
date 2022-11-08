@@ -110,7 +110,7 @@ Hint for Grafana: the setup allows write access and is editable!
 
 ### Client Instrumentation
 
-How is the Java Spring Boot 3 Application instrumented and where are the changes located?
+*How is the Java Spring Boot 3 Application instrumented and where are the changes located?*
 
 - Metrics: `io.micrometer:micrometer-registry-prometheus` via changes in
   - [pom.xml](pom.xml) 
@@ -129,18 +129,37 @@ How is the Java Spring Boot 3 Application instrumented and where are the changes
 
 ## ## Setup 2
 
+See https://grafana.com/blog/2022/05/04/how-to-capture-spring-boot-metrics-with-the-opentelemetry-java-instrumentation-agent/
+
+In Setup 1 metrics were provided by the Spring Boot app using `io.micrometer:micrometer-registry-prometheus`
+and scraped by *Prometheus* (and from there send to *Grafana*). In this setup the scraping is done by
+the [Open Telemetry Collector].(https://github.com/open-telemetry/opentelemetry-collector) (a Go implementation).
+The Otel Collector’s pipeline has 3 steps: Receivers —> Processors —> Exporters.
+
+- for the receiver, we use `otlp`
+- for the processor, we use `batch`
+- for the exporter, we use `batch`
+
 ### Client Instrumentation
 
-How is the Java Spring Boot 3 Application instrumented and where are the changes located?
+*How is the Java Spring Boot 3 Application instrumented and where are the changes located?*
 
-- Tracing: `otel/opentelemetry-collector:0.63.0`
-- `java -javaagent:path/to/opentelemetry-javaagent.jar  opentelemetry-javaagent.jar -jar myjar.jar`
+No changes in code. Instrumentation via
+[OpenTelemetry Java instrumentation agent](https://github.com/open-telemetry/opentelemetry-java-instrumentation).
+
+Start with
+
+```bash
+export OTEL_METRICS_EXPORTER=otlp
+java -javaagent:./observability/setup2/opentelemetry-javaagent.jar \
+     -jar target/demo-0.0.1-SNAPSHOT.jar`
+```
 
 ---
 
 ## Run the setups
 
-### Setup 1
+### Run setup 1
 
 This setup starts 6 containers using [setup1/docker-compose.yml](observability/setup1/docker-compose.yml).
 There are two identical Spring Boot Services, the first `demo1-sb3` will call the second one `demo2-sb3`.
@@ -228,5 +247,12 @@ Grafana Logging (LOKI)
 
 ![Grafana Logging (LOKI)](docs/images/setup1/grafana-loki.png)
 
+## Run setup 2
 
+./otelcol --config observability/setup2/docker/otel/otel-collector.yaml
 
+### Check Services for Readiness
+
+- OTEL Collector:
+  - Readiness: `curl http://localhost:13133` ==> *{"status":"Server available","upSince":"2022-11-08T05:50:29.269885109Z","uptime":"14.027149655s"}*
+  - [API Dokumentation](https://github.com/open-telemetry/opentelemetry-collector/blob/main/docs/troubleshooting.md#health-check)
