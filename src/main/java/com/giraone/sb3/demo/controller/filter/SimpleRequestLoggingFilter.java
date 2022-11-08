@@ -8,7 +8,7 @@ public class SimpleRequestLoggingFilter extends AbstractRequestLoggingFilter {
     @Override
     protected boolean shouldLog(HttpServletRequest request) {
         final String path = request.getRequestURI();
-        return path != null && !path.startsWith("/actuator") && logger.isDebugEnabled();
+        return logger.isDebugEnabled() && path != null && !path.startsWith("/actuator");
     }
 
     /**
