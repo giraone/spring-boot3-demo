@@ -42,15 +42,19 @@
     </dependency>
 
     <!-- OBSERVABILITY -->
-    <!-- Micrometer Prometheus registry for metrics -->
+    <!-- Micrometer Prometheus registry for metrics (Setup 1 only) -->
     <dependency>
       <groupId>io.micrometer</groupId>
       <artifactId>micrometer-registry-prometheus</artifactId>
     </dependency>
-    <!-- Micrometer OpenTelemetry Bridge registry for tracing -->
+    <!-- Micrometer OpenTelemetry Bridge registry for tracing (Setup 1 only) -->
     <dependency>
       <groupId>io.micrometer</groupId>
       <artifactId>micrometer-tracing-bridge-otel</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.opentelemetry</groupId>
+      <artifactId>opentelemetry-exporter-zipkin</artifactId>
     </dependency>
     <!-- Grafana LOKI for logging -->
     <dependency>
