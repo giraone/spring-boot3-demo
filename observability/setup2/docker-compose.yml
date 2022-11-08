@@ -76,6 +76,7 @@ services:
       - SPRING_PROFILES_ACTIVE=setup2
       - APPLICATION_CLIENT_HOST=demo2-sb3
       - OTEL_METRICS_EXPORTER=otlp
+      - OTEL_ZIPKIN_ENDPOINT=http://tempo-sb3:9411/api/v2/spans
 
   demo2:
     image: localhost/spring-boot3-demo
@@ -90,6 +91,7 @@ services:
       - SPRING_PROFILES_ACTIVE=setup2
       - APPLICATION_CLIENT_HOST=demo2-sb3
       - OTEL_METRICS_EXPORTER=otlp
+      - OTEL_ZIPKIN_ENDPOINT=http://tempo-sb3:9411/api/v2/spans
 
 networks:
   sb3:
