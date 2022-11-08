@@ -29,12 +29,7 @@ public class ServiceApplication {
 	}
 
     @Bean
-    CalculationWebClient calculationWebClient(HttpServiceProxyFactory factory) {
-        return factory.createClient(CalculationWebClient.class);
-    }
-
-    @Bean
-    HttpServiceProxyFactory httpServiceProxyFactory(WebClient.Builder builder) {
+    CalculationWebClient calculationWebClient() {
         String host = "127.0.0.1";
         int port = 8080;
         if (applicationProperties.getClient() != null) {
@@ -47,8 +42,13 @@ public class ServiceApplication {
         if (host == null || host.length() == 0) {
             host = "127.0.0.1";
         }
-        WebClient.Builder webClientBuilder = builder.baseUrl("http://" + host + ":" + port);
-        return WebClientAdapter.createHttpServiceProxyFactory(webClientBuilder);
+        WebClient webClient =  WebClient.builder()
+            .baseUrl("http://" + host + ":" + port)
+            .build();
+        HttpServiceProxyFactory factory = HttpServiceProxyFactory.builder()
+            .clientAdapter(WebClientAdapter.forClient(webClient))
+            .build();
+        return factory.createClient(CalculationWebClient.class);
     }
 
     @EventListener(ApplicationReadyEvent.class)
