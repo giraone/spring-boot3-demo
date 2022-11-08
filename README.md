@@ -13,7 +13,8 @@ Basically the code from
 ## Content
 
 There is one endpoint `/calculate/{input1}[?input2={input2}]` calculating the *fibonacci* value directly for `input1`
-and also indirectly via a REST call to endpoint `/calculate2/{input}` to the same service.
+and also indirectly via a REST call to a second endpoint `/calculate2/{input}` one the same service or a remote same
+service of the same type.
 
 ## Tests from Command Line
 
@@ -102,9 +103,17 @@ With the setup, the service can call each other.
 
 # Observability - Metrics, Tracing, Logs)
 
+*One of the more interesting new features in Spring Boot 3 is the support for Prometheus exemplars.
+Exemplars are references to data outside the metrics published by an application.
+They allow linking metrics data to distributed traces. In that case, the published metrics contain a reference to the traceId.*
+
+https://github.com/open-telemetry/opentelemetry-java/tree/main/exporters/zipkin
+
 ## Setup 1
 
-See https://spring.io/blog/2022/10/12/observability-with-spring-boot-3
+- See https://spring.io/blog/2022/10/12/observability-with-spring-boot-3
+- See https://piotrminkowski.com/2022/11/03/spring-boot-3-observability-with-grafana/
+- See https://github.com/open-telemetry/opentelemetry-java/blob/main/sdk-extensions/autoconfigure/README.md
 
 Hint for Grafana: the setup allows write access and is editable!
 
