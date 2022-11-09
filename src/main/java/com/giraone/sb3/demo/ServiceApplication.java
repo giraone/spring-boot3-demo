@@ -1,6 +1,7 @@
 package com.giraone.sb3.demo;
 
 import com.giraone.sb3.demo.config.ApplicationProperties;
+import com.giraone.sb3.demo.controller.filter.HeaderExchangeClientFilter;
 import com.giraone.sb3.demo.service.CalculationWebClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,6 +45,7 @@ public class ServiceApplication {
         }
         WebClient webClient =  WebClient.builder()
             .baseUrl("http://" + host + ":" + port)
+            .filter(new HeaderExchangeClientFilter(applicationProperties))
             .build();
         HttpServiceProxyFactory factory = HttpServiceProxyFactory.builder()
             .clientAdapter(WebClientAdapter.forClient(webClient))

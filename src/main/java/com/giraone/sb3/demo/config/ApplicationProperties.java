@@ -3,6 +3,8 @@ package com.giraone.sb3.demo.config;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
+import java.util.Set;
+
 /**
  * Properties specific to application.
  * <p>
@@ -17,6 +19,7 @@ public class ApplicationProperties {
     private boolean showConfigOnStartup;
     /** URL (host/port) for second service */
     private RemoteService client = new RemoteService();
+    private Set<String> propagatedHeaders;
 
     public boolean isShowConfigOnStartup() {
         return showConfigOnStartup;
@@ -32,6 +35,14 @@ public class ApplicationProperties {
 
     public void setClient(RemoteService client) {
         this.client = client;
+    }
+
+    public Set<String> getPropagatedHeaders() {
+        return propagatedHeaders;
+    }
+
+    public void setPropagatedHeaders(Set<String> propagatedHeaders) {
+        this.propagatedHeaders = propagatedHeaders;
     }
 
     @Override

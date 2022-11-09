@@ -19,10 +19,13 @@ management:
   endpoints:
     web:
       exposure:
-        include: 'prometheus,loggers,metrics'
+        # health,prometheus is needed; the others are for troubleshooting
+        include: 'health,prometheus,loggers,metrics,env'
   endpoint:
     loggers:
       enabled: true
+    env:
+      show-values: ALWAYS # Show values - do not use in production (may leak passwords)
   tracing:
     sampling:
       # All traces should be sent to latency analysis tool
@@ -34,3 +37,10 @@ application:
   client:
     host: 127.0.0.1
     port: 8080
+  propagated-headers:
+    - Authorization
+#    - traceparent
+#    - tracestate
+#    - X-B3-TraceId
+#    - X-B3-SpanId
+
