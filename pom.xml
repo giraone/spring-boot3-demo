@@ -23,6 +23,18 @@
     <assertj.version>3.23.1</assertj.version>
   </properties>
 
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>io.opentelemetry</groupId>
+        <artifactId>opentelemetry-bom</artifactId>
+        <version>1.19.0</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
   <dependencies>
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -42,27 +54,32 @@
     </dependency>
 
     <!-- OBSERVABILITY -->
-    <!-- Micrometer Prometheus registry for metrics (Setup 1 only) -->
+    <!-- Micrometer Prometheus registry for METRICS (Setup 1 only) -->
     <dependency>
       <groupId>io.micrometer</groupId>
       <artifactId>micrometer-registry-prometheus</artifactId>
     </dependency>
-    <!-- Micrometer OpenTelemetry Bridge registry for tracing (Setup 1 only) -->
+    <!-- Micrometer OpenTelemetry Bridge registry for TRACING (Setup 1 only) -->
     <dependency>
       <groupId>io.micrometer</groupId>
       <artifactId>micrometer-tracing-bridge-otel</artifactId>
     </dependency>
-    <!-- OpenTelemetry Autoconfigure to export tracing in various formats (Setup 1 only) -->
+    <!-- OpenTelemetry API and Autoconfigure to export TRACING in various formats (Setup 1 only) -->
     <dependency>
       <groupId>io.opentelemetry</groupId>
       <artifactId>opentelemetry-sdk-extension-autoconfigure</artifactId>
       <version>1.19.0-alpha</version>
     </dependency>
+    <!-- The specific exporter format is zipkin (Setup 1 only) -->
     <dependency>
       <groupId>io.opentelemetry</groupId>
       <artifactId>opentelemetry-exporter-zipkin</artifactId>
     </dependency>
-    <!-- Grafana LOKI for logging -->
+    <dependency>
+      <groupId>io.opentelemetry</groupId>
+      <artifactId>opentelemetry-exporter-zipkin</artifactId>
+    </dependency>
+    <!-- Direct usage of Grafana LOKI by using its appender for LOGGING -->
     <dependency>
       <groupId>com.github.loki4j</groupId>
       <artifactId>loki-logback-appender</artifactId>
