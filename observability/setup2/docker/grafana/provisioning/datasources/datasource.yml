@@ -1,16 +1,6 @@
 apiVersion: 1
 
 datasources:
-  - name: Prometheus
-    type: prometheus
-    access: proxy
-    url: http://prometheus-sb3:9090
-    editable: false
-    jsonData:
-      httpMethod: POST
-      exemplarTraceIdDestinations:
-        - name: trace_id
-          datasourceUid: tempo
   - name: Tempo
     type: tempo
     access: proxy
@@ -19,7 +9,7 @@ datasources:
     basicAuth: false
     isDefault: true
     version: 1
-    editable: false
+    editable: true
     apiVersion: 1
     uid: tempo
     jsonData:
@@ -35,11 +25,11 @@ datasources:
     basicAuth: false
     isDefault: false
     version: 1
-    editable: false
+    editable: true
     apiVersion: 1
     jsonData:
       derivedFields:
         - datasourceUid: tempo
           matcherRegex: \[.+,(.+?),
-          name: TraceID
+          name: traceID
           url: $${__value.raw}
