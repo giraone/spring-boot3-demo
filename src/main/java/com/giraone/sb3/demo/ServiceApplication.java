@@ -1,8 +1,9 @@
 package com.giraone.sb3.demo;
 
 import com.giraone.sb3.demo.config.ApplicationProperties;
-import com.giraone.sb3.demo.controller.filter.HeaderExchangeClientFilter;
 import com.giraone.sb3.demo.service.CalculationWebClient;
+import io.opentelemetry.sdk.OpenTelemetrySdk;
+import io.opentelemetry.sdk.autoconfigure.AutoConfiguredOpenTelemetrySdk;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -13,6 +14,8 @@ import org.springframework.context.event.EventListener;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.support.WebClientAdapter;
 import org.springframework.web.service.invoker.HttpServiceProxyFactory;
+
+;
 
 @SpringBootApplication
 public class ServiceApplication {
@@ -45,7 +48,6 @@ public class ServiceApplication {
         }
         WebClient webClient =  WebClient.builder()
             .baseUrl("http://" + host + ":" + port)
-            .filter(new HeaderExchangeClientFilter(applicationProperties))
             .build();
         HttpServiceProxyFactory factory = HttpServiceProxyFactory.builder()
             .clientAdapter(WebClientAdapter.forClient(webClient))
@@ -59,5 +61,9 @@ public class ServiceApplication {
         if (applicationProperties.isShowConfigOnStartup()) {
             LOGGER.info("{}", applicationProperties);
         }
+
+        OpenTelemetrySdk openTelemetrySdk = AutoConfiguredOpenTelemetrySdk.initialize()
+            .getOpenTelemetrySdk();
+        LOGGER.info("{}", openTelemetrySdk);
     }
 }
