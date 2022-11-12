@@ -26,6 +26,11 @@ management:
       enabled: true
     env:
       show-values: ALWAYS # Show values - do not use in production (may leak passwords)
+  metrics:
+    distribution:
+      percentiles-histogram:
+        # For exemplars to work, we need histogram buckets
+        http.server.requests: true
   tracing:
     sampling:
       # All traces should be sent to latency analysis tool
