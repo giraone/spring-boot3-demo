@@ -13,7 +13,7 @@ public class RequestLoggingFilterConfig {
         filter.setIncludeQueryString(true);
         filter.setIncludePayload(false);
         filter.setMaxPayloadLength(1000);
-        filter.setIncludeHeaders(true);
+        // filter.setIncludeHeaders(true);
         return filter;
     }
 }
