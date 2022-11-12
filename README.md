@@ -99,9 +99,9 @@ curl http://localhost:8080/actuator/metrics/demo.calculate | jq
 - Run Service 2 using the environment variables
   `SERVER_PORT=8081;SPRING_APPLICATION_NAME=demo2;APPLICATION_CLIENT_PORT=8080`
 
-With the setup, the service can call each other.
+With this setup, the services can call each other.
 
-# Observability - Metrics, Tracing, Logs)
+# Observability - Metrics, Tracing, Logs
 
 *One of the more interesting new features in Spring Boot 3 is the support for Prometheus exemplars.
 Exemplars are references to data outside the metrics published by an application.
@@ -124,8 +124,9 @@ Hint for Grafana: the setup allows write access and is editable!
 - Metrics: `io.micrometer:micrometer-registry-prometheus` via changes in
   - [pom.xml](pom.xml) 
   - [application.yml](src/main/resources/application.yml) (`management.endpoints.web.exposure.include=prometheus`)
-- Tracing: `io.micrometer:micrometer-tracing-bridge-otel` via changes in
+- Tracing: `io.micrometer:micrometer-tracing-bridge-otel` plus `io.opentelemetry:opentelemetry-exporter-zipkin` via changes in
   - [pom.xml](pom.xml)
+  - and a couple of environment variables in [start-demo1.sh](start-demo1.sh) / [start-demo2.sh](start-demo2.sh)
 - Logs: `com.github.loki4j:loki4j.logback.Loki4jAppender` via changes in
   - [pom.xml](pom.xml) 
   - [logback-spring.xml](src/main/resources/logback-spring.xml)
@@ -136,12 +137,14 @@ Hint for Grafana: the setup allows write access and is editable!
 - Tracing: [Grafana Tempo](https://grafana.com/oss/tempo/) 
 - Logs: [Grafana LOKI](https://grafana.com/oss/loki/)
 
-## ## Setup 2
+## Setup 2
 
 See https://grafana.com/blog/2022/05/04/how-to-capture-spring-boot-metrics-with-the-opentelemetry-java-instrumentation-agent/
 
+First remove all dependencies of Setup 1 in [pom.xml](pom.xml).
+
 In Setup 1 metrics were provided by the Spring Boot app using `io.micrometer:micrometer-registry-prometheus`
-and scraped by *Prometheus* (and from there send to *Grafana*). In this setup the scraping is done by
+and scraped by *Prometheus* (and from there send to *Grafana*). In this Setup 2, the scraping is done by
 the [Open Telemetry Collector].(https://github.com/open-telemetry/opentelemetry-collector) (a Go implementation).
 The Otel Collector’s pipeline has 3 steps: Receivers —> Processors —> Exporters.
 
@@ -160,6 +163,8 @@ Start with
 
 ```bash
 export OTEL_METRICS_EXPORTER=otlp
+export OTEL_TRACES_EXPORTER=otlp
+export OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4317
 java -javaagent:./observability/setup2/opentelemetry-javaagent.jar \
      -jar target/demo-0.0.1-SNAPSHOT.jar`
 ```
@@ -229,6 +234,13 @@ f04037417875  localhost/spring-boot3-demo:latest                        2 minute
 - Grafana:
   - [UI](http://localhost:3000/)
   - [API Dokumentation](https://grafana.com/docs/grafana/latest/developers/http_api/)
+
+### Perform some client calls
+
+```shell
+curl http://localhost:8080/calculate/10?input2=12
+curl http://localhost:8081/calculate/10?input2=12
+```
 
 ### UIs
 
