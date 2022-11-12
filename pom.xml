@@ -75,10 +75,6 @@
       <groupId>io.opentelemetry</groupId>
       <artifactId>opentelemetry-exporter-zipkin</artifactId>
     </dependency>
-    <dependency>
-      <groupId>io.opentelemetry</groupId>
-      <artifactId>opentelemetry-exporter-zipkin</artifactId>
-    </dependency>
     <!-- Direct usage of Grafana LOKI by using its appender for LOGGING -->
     <dependency>
       <groupId>com.github.loki4j</groupId>
