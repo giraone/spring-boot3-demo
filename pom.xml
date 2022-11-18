@@ -130,8 +130,18 @@
           </image>
         </configuration>
       </plugin>
+
+      <!-- mvn versions:update-parent && mvn versions:update-properties && mvn versions:use-latest-versions -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>versions-maven-plugin</artifactId>
+        <configuration>
+          <rulesUri>file:///${project.basedir}/mvn-versions-rules.xml</rulesUri>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
+
   <repositories>
     <repository>
       <id>spring-milestones</id>
