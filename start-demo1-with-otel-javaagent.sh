@@ -15,4 +15,4 @@ export OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4317
 
 java \
   -javaagent:./observability/setup2/opentelemetry-javaagent.jar \
-  -jar target/demo-0.0.1-SNAPSHOT.jar
+  -jar target/demo-sb3.jar

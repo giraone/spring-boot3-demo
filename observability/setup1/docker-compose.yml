@@ -60,38 +60,38 @@ services:
     ports:
       - "3000:3000"
 
-#  demo1:
-#    image: localhost/spring-boot3-demo
-#    hostname: demo1-sb3
-#    container_name: demo1-sb3
-#    networks:
-#      - sb3
-#    ports:
-#      - "8080:8080"
-#    environment:
-#      - SPRING_APPLICATION_NAME=demo1 # the name is shown in the log
-#      - SPRING_PROFILES_ACTIVE=setup1
-#      - OTEL_METRICS_EXPORTER=none
-#      - APPLICATION_CLIENT_HOST=demo2-sb3
-#      - OTEL_TRACES_EXPORTER=zipkin
-#      - OTEL_EXPORTER_ZIPKIN_ENDPOINT=http://tempo-sb3:9411/api/v2/spans
-#      - OTEL_PROPAGATORS=b3
-#
-#  demo2:
-#    image: localhost/spring-boot3-demo
-#    hostname: demo2-sb3
-#    container_name: demo2-sb3
-#    networks:
-#      - sb3
-#    ports:
-#      - "8081:8080"
-#    environment:
-#      - SPRING_APPLICATION_NAME=demo2 # the name is shown in the log
-#      - SPRING_PROFILES_ACTIVE=setup1
-#      - OTEL_METRICS_EXPORTER=none
-#      - OTEL_TRACES_EXPORTER=zipkin
-#      - OTEL_EXPORTER_ZIPKIN_ENDPOINT=http://tempo-sb3:9411/api/v2/spans
-#      - OTEL_PROPAGATORS=b3
+  demo1:
+    image: demo-sb3
+    hostname: demo1-sb3
+    container_name: demo1-sb3
+    networks:
+      - sb3
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_APPLICATION_NAME=demo1 # the name is shown in the log
+      - SPRING_PROFILES_ACTIVE=setup1
+      - OTEL_METRICS_EXPORTER=none
+      - APPLICATION_CLIENT_HOST=demo2-sb3
+      - OTEL_TRACES_EXPORTER=zipkin
+      - OTEL_EXPORTER_ZIPKIN_ENDPOINT=http://tempo-sb3:9411/api/v2/spans
+      - OTEL_PROPAGATORS=b3
+
+  demo2:
+    image: demo-sb3
+    hostname: demo2-sb3
+    container_name: demo2-sb3
+    networks:
+      - sb3
+    ports:
+      - "8081:8080"
+    environment:
+      - SPRING_APPLICATION_NAME=demo2 # the name is shown in the log
+      - SPRING_PROFILES_ACTIVE=setup1
+      - OTEL_METRICS_EXPORTER=none
+      - OTEL_TRACES_EXPORTER=zipkin
+      - OTEL_EXPORTER_ZIPKIN_ENDPOINT=http://tempo-sb3:9411/api/v2/spans
+      - OTEL_PROPAGATORS=b3
 
 networks:
   sb3:

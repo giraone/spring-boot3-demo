@@ -3,11 +3,18 @@ package com.giraone.sb3.demo.controller.filter;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.web.filter.AbstractRequestLoggingFilter;
 
+import java.util.Enumeration;
+
 public class SimpleRequestLoggingFilter extends AbstractRequestLoggingFilter {
 
     @Override
     protected boolean shouldLog(HttpServletRequest request) {
         final String path = request.getRequestURI();
+        final Enumeration<String> enums = request.getHeaderNames();
+        enums.asIterator().forEachRemaining(h -> {
+            String value = request.getHeader(h);
+            System.out.println(h + " " + value);
+        });
         return logger.isDebugEnabled() && path != null && !path.startsWith("/actuator");
     }
 

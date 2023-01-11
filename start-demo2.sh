@@ -14,4 +14,4 @@ export OTEL_EXPORTER_TRACES_ENDPOINT=http://localhost:9411/api/v2/spans # zipkin
 export OTEL_PROPAGATORS=tracecontext,baggage,b3,b3multi
 export OTEL_TRACES_SAMPLER=always_on
 
-java -jar target/demo-0.0.1-SNAPSHOT.jar
+java -jar target/demo-sb3.jar

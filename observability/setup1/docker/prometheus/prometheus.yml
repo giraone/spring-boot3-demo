@@ -1,8 +1,8 @@
 # global config
 global:
-  scrape_interval:     5s # Set the scrape interval to every 5 seconds. Default is every 1 minute.
-  evaluation_interval: 5s # Evaluate rules every 5 seconds. The default is every 1 minute.
-  # scrape_timeout is set to the global default (10s).
+  scrape_interval:     30s # Default is every 1 minute.
+  evaluation_interval: 30s # Default is every 1 minute.
+  scrape_timeout:      20s # Default is 10s.
 
 # Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
 rule_files:
@@ -15,18 +15,18 @@ scrape_configs:
   # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
   - job_name: 'prometheus'
     # metrics_path defaults to '/metrics'
-    scrape_interval: 30s
+    scrape_interval: 60s
     static_configs:
       - targets: ['127.0.0.1:9090']
 
   - job_name: 'demo1-actuator-prometheus'
     metrics_path: '/actuator/prometheus'
-    scrape_interval: 5s
+    scrape_interval: 20s
     static_configs:
       - targets: ['demo1-sb3:8080']
 
   - job_name: 'demo2-actuator-prometheus'
     metrics_path: '/actuator/prometheus'
-    scrape_interval: 5s
+    scrape_interval: 20s
     static_configs:
       - targets: ['demo2-sb3:8080']

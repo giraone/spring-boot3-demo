@@ -67,10 +67,10 @@ public class ServiceApplication {
         if (applicationProperties.isShowConfigOnStartup()) {
             LOGGER.info("{}", applicationProperties);
         }
-
+/*
         OpenTelemetrySdk openTelemetrySdk = AutoConfiguredOpenTelemetrySdk.initialize()
             .getOpenTelemetrySdk();
-        LOGGER.info("{}", openTelemetrySdk);
+        LOGGER.info("{}", openTelemetrySdk);*/
     }
 
     private static void logApplicationStartup(Environment env) {
