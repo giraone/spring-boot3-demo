@@ -1,0 +1,96 @@
+version: "3.5"
+
+services:
+  tempo:
+    image: grafana/tempo
+    hostname: tempo-sb3
+    container_name: tempo-sb3
+    command: [ "-search.enabled=true", "-config.file=/etc/tempo.yaml" ]
+    networks:
+      - sb3
+    volumes:
+      - ./docker/tempo/tempo-local.yaml:/etc/tempo.yaml:ro
+      - ./tempo-data:/tmp/tempo
+    ports:
+      # for testing apps running in the host, we expose zipkin and otlp ingest ports of tempo to the host
+      - "9411:9411" # zipkin ingest
+      - "4317:4317" # otlp grpc ingest
+      - "4318:4318" # otlp http ingest
+      # and the UI
+      - "3200:3200" # grafana and admin API
+
+  loki:
+    image: grafana/loki
+    hostname: loki-sb3
+    container_name: loki-sb3
+    command: [ "-config.file=/etc/loki/local-config.yaml" ]
+    networks:
+      - sb3
+    ports:
+      - "3100:3100" # log ingest
+
+  victoria-metrics:
+    image: victoriametrics/victoria-metrics
+    hostname: victoria-metrics-sb3
+    container_name: victoria-metrics-sb3
+    networks:
+      - sb3
+    command: [ "-promscrape.config=/etc/prometheus.yml" ]
+    volumes:
+      - ./victoria-metrics-data:/victoria-metrics-data:rw
+      - ./docker/victoria-metrics/prometheus.yml:/etc/prometheus.yml:ro
+    ports:
+      - "8428:8428"
+
+  grafana:
+    image: grafana/grafana
+    hostname: grafana-sb3
+    container_name: grafana-sb3
+    networks:
+      - sb3
+    volumes:
+      - ./docker/grafana/grafana.ini:/etc/grafana/grafana.ini:ro
+      - ./docker/grafana/provisioning/datasources:/etc/grafana/provisioning/datasources:rw
+      - ./docker/grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards:rw
+    environment:
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+      - GF_AUTH_DISABLE_LOGIN_FORM=true
+    ports:
+      - "3000:3000"
+
+  demo1:
+    image: demo-sb3
+    hostname: demo1-sb3
+    container_name: demo1-sb3
+    networks:
+      - sb3
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_APPLICATION_NAME=demo1 # the name is shown in the log
+      - SPRING_PROFILES_ACTIVE=setup1
+      - OTEL_METRICS_EXPORTER=none
+      - APPLICATION_CLIENT_HOST=demo2-sb3
+      - OTEL_TRACES_EXPORTER=zipkin
+      - OTEL_EXPORTER_ZIPKIN_ENDPOINT=http://tempo-sb3:9411/api/v2/spans
+      - OTEL_PROPAGATORS=b3
+
+  demo2:
+    image: demo-sb3
+    hostname: demo2-sb3
+    container_name: demo2-sb3
+    networks:
+      - sb3
+    ports:
+      - "8081:8080"
+    environment:
+      - SPRING_APPLICATION_NAME=demo2 # the name is shown in the log
+      - SPRING_PROFILES_ACTIVE=setup1
+      - OTEL_METRICS_EXPORTER=none
+      - OTEL_TRACES_EXPORTER=zipkin
+      - OTEL_EXPORTER_ZIPKIN_ENDPOINT=http://tempo-sb3:9411/api/v2/spans
+      - OTEL_PROPAGATORS=b3
+
+networks:
+  sb3:

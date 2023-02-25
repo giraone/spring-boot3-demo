@@ -152,6 +152,10 @@ The Otel Collector’s pipeline has 3 steps: Receivers —> Processors —> Expo
 - for the processor, we use `batch`
 - for the exporter, we use `batch`
 
+## Setup 3
+
+Same as Setup 1, but with [VictoriaMetrics](https://docs.victoriametrics.com/) instead of Prometheus.
+
 ### Client Instrumentation
 
 *How is the Java Spring Boot 3 Application instrumented and where are the changes located?*
@@ -234,6 +238,9 @@ f04037417875  localhost/spring-boot3-demo:latest                        2 minute
 - Grafana:
   - [UI](http://localhost:3000/)
   - [API Dokumentation](https://grafana.com/docs/grafana/latest/developers/http_api/)
+- VictoriaMetrics:
+  - [UI](http://localhost:8428/)
+  - Readiness: `curl http://localhost:8428/metrics` ==> *List of metrics*
 
 ### Perform some client calls
 
