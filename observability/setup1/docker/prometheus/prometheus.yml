@@ -10,9 +10,9 @@ rule_files:
 # - "second_rules.yml"
 
 # A scrape configuration containing exactly one endpoint to scrape:
-# Here it's Prometheus itself.
+# The job name is added as a label `job=<job_name>` to any time series scraped from this config.
 scrape_configs:
-  # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
+  # Here it's Prometheus itself.
   - job_name: 'prometheus'
     # metrics_path defaults to '/metrics'
     scrape_interval: 60s
