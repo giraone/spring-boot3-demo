@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>3.0.1</version>
+    <version>3.0.3</version>
     <relativePath/> <!-- lookup parent from repository -->
   </parent>
 
@@ -20,7 +20,7 @@
     <maven.compiler.source>17</maven.compiler.source>
     <maven.compiler.target>17</maven.compiler.target>
     <junit.jupiter.version>5.9.2</junit.jupiter.version>
-    <assertj.version>3.24.1</assertj.version>
+    <assertj.version>3.24.2</assertj.version>
     <!-- Plugin versions and properties -->
     <maven-versions-plugin.version>2.14.1</maven-versions-plugin.version>
     <jib-maven-plugin.version>3.3.1</jib-maven-plugin.version>
@@ -33,7 +33,7 @@
       <dependency>
         <groupId>io.opentelemetry</groupId>
         <artifactId>opentelemetry-bom</artifactId>
-        <version>1.22.0</version>
+        <version>1.23.1</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
