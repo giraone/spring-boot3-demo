@@ -61,7 +61,7 @@ services:
       - "3000:3000"
 
   demo1:
-    image: demo-sb3
+    image: spring-boot3-demo
     hostname: demo1-sb3
     container_name: demo1-sb3
     networks:
@@ -78,7 +78,7 @@ services:
       - OTEL_PROPAGATORS=b3
 
   demo2:
-    image: demo-sb3
+    image: spring-boot3-demo
     hostname: demo2-sb3
     container_name: demo2-sb3
     networks:
