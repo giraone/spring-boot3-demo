@@ -65,21 +65,21 @@
       <artifactId>micrometer-registry-prometheus</artifactId>
     </dependency>
     <!-- Micrometer OpenTelemetry Bridge registry for TRACING (Setup 1 only) -->
-    <dependency>
-      <groupId>io.micrometer</groupId>
-      <artifactId>micrometer-tracing-bridge-otel</artifactId>
-    </dependency>
+<!--    <dependency>-->
+<!--      <groupId>io.micrometer</groupId>-->
+<!--      <artifactId>micrometer-tracing-bridge-otel</artifactId>-->
+<!--    </dependency>-->
     <!-- OpenTelemetry API and Autoconfigure to export TRACING in various formats (Setup 1 only) -->
-    <dependency>
-      <groupId>io.opentelemetry</groupId>
-      <artifactId>opentelemetry-sdk-extension-autoconfigure</artifactId>
-      <version>1.19.0-alpha</version>
-    </dependency>
+<!--    <dependency>-->
+<!--      <groupId>io.opentelemetry</groupId>-->
+<!--      <artifactId>opentelemetry-sdk-extension-autoconfigure</artifactId>-->
+<!--      <version>1.19.0-alpha</version>-->
+<!--    </dependency>-->
     <!-- The specific exporter format is zipkin (Setup 1 only) -->
-    <dependency>
-      <groupId>io.opentelemetry</groupId>
-      <artifactId>opentelemetry-exporter-zipkin</artifactId>
-    </dependency>
+<!--    <dependency>-->
+<!--      <groupId>io.opentelemetry</groupId>-->
+<!--      <artifactId>opentelemetry-exporter-zipkin</artifactId>-->
+<!--    </dependency>-->
     <!-- Must be on the class path for Spring Application Content for tests! -->
     <!--
     <dependency>
@@ -87,11 +87,11 @@
       <artifactId>opentelemetry-exporter-otlp</artifactId>
     </dependency>-->
     <!-- Direct usage of Grafana LOKI by using its appender for LOGGING -->
-    <dependency>
-      <groupId>com.github.loki4j</groupId>
-      <artifactId>loki-logback-appender</artifactId>
-      <version>1.3.2</version>
-    </dependency>
+<!--    <dependency>-->
+<!--      <groupId>com.github.loki4j</groupId>-->
+<!--      <artifactId>loki-logback-appender</artifactId>-->
+<!--      <version>1.3.2</version>-->
+<!--    </dependency>-->
 
     <!-- TOOLING -->
     <dependency>
@@ -125,6 +125,21 @@
       <version>${assertj.version}</version>
       <scope>test</scope>
     </dependency>
+    <!-- for metrics testing -->
+    <dependency>
+      <groupId>io.micrometer</groupId>
+      <artifactId>micrometer-observation-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <!-- For stress testing -->
+    <!--
+    <dependency>
+      <groupId>com.jupiter-tools</groupId>
+      <artifactId>stress-test</artifactId>
+      <version>0.2</version>
+      <scope>test</scope>
+    </dependency>
+    -->
   </dependencies>
 
   <build>

@@ -8,12 +8,28 @@
 </head>
 <body>
 
+<h3>Controller Endpoints</h3>
+
+<ul>
+  <li><a href="calculate/10">calculate/10</a></li>
+  <li><a href="calculate/12?input2=18">calculate/12?input2=18</a></li>
+  <li><a href="calculate2/15">calculate2/15</a></li>
+  <li><a href="sleep/1000">sleep/1000</a></li>
+</ul>
+
 <h3>Actuator Endpoints</h3>
 
 <ul>
   <li><a href="actuator/health">health</a></li>
   <li><a href="actuator/loggers">loggers</a></li>
   <li><a href="actuator/metrics">metrics</a></li>
+  <li><hr /></li>
+  <li><a href="actuator/metrics/demo.controller.endpoints">demo.controller.endpoints - a timer created by <i>@Observed</i></a></li>
+  <li><a href="actuator/metrics/demo.controller.endpoints.active">demo.controller.endpoints.active</a></li>
+  <li><a href="actuator/metrics/demo.controller.sleep">demo.controller.sleep - a timer created by <i>@Observed</i></a></li>
+  <li><a href="actuator/metrics/demo.controller.sleep.active">demo.controller.sleep.active</a></li>
+  <li><a href="actuator/metrics/demo.service.fibonacci">demo.service.fibonacci - a timer created by code <i>Observation.createNotStarted("demo.service.fibonacci")</i></a></li>
+  <li><a href="actuator/metrics/demo.service.fibonacci.active">demo.service.fibonacci.active - demo.service.fibonacci.active</i></a></li>
   <li><hr /></li>
   <li><a href="actuator/metrics/spring.kafka.template">spring.kafka.template</a></li>
   <li><a href="actuator/metrics/http.server.requests">http.server.requests</a></li>

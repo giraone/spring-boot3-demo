@@ -2,8 +2,8 @@ package com.giraone.sb3.demo;
 
 import com.giraone.sb3.demo.config.ApplicationProperties;
 import com.giraone.sb3.demo.service.CalculationWebClient;
-import io.opentelemetry.sdk.OpenTelemetrySdk;
-import io.opentelemetry.sdk.autoconfigure.AutoConfiguredOpenTelemetrySdk;
+//import io.opentelemetry.sdk.OpenTelemetrySdk;
+//import io.opentelemetry.sdk.autoconfigure.AutoConfiguredOpenTelemetrySdk;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;

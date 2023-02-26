@@ -19,11 +19,13 @@ public class ServiceController {
         this.calculationWebClient = calculationWebClient;
     }
 
-    @Observed
-    @GetMapping("calculate/{input1}")
-    Result calculate(@PathVariable int input1, @RequestParam(required = false) Integer input2) {
+    @Observed(
+        name = "demo.controller.endpoints"
+    )
+    @GetMapping("calculate/{input}")
+    Result calculate(@PathVariable int input, @RequestParam(required = false) Integer input2) {
 
-        if (input1 < 1 || input1 > 30) {
+        if (input < 1 || input > 30) {
             throw new IllegalArgumentException("PathVariable input1 must be between [1,30]");
         }
 
@@ -33,7 +35,7 @@ public class ServiceController {
             }
         }
 
-        int result1 = calculations.fibonacci(input1);
+        int result1 = calculations.fibonacci(input);
         int result2 = 0;
         if (input2 != null) {
             result2 = calculationWebClient.fibonacci(input2);
@@ -42,7 +44,9 @@ public class ServiceController {
         return new Result(true, result1, result2);
     }
 
-    @Observed
+    @Observed(
+        name = "demo.controller.endpoints"
+    )
     @GetMapping("calculate2/{input}")
     int calculate2(@PathVariable int input) {
 
@@ -50,5 +54,26 @@ public class ServiceController {
             throw new IllegalArgumentException("PathVariable input must be between [1,30]");
         }
         return calculations.fibonacci(input);
+    }
+
+    @Observed(
+        name = "demo.controller.sleep",
+        contextualName = "observed sleep endpoint",
+        lowCardinalityKeyValues = {
+            "class", "ServiceController"
+        }
+    )
+    @GetMapping("sleep/{input}")
+    int sleep(@PathVariable int input) {
+
+        if (input < 0) {
+            input = 0;
+        }
+        try {
+            Thread.sleep(input);
+        } catch (InterruptedException e) {
+            return -1;
+        }
+        return input;
     }
 }

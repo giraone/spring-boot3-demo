@@ -1,24 +1,58 @@
 package com.giraone.sb3.demo.controller;
 
 import com.giraone.sb3.demo.ServiceApplication;
+import org.assertj.core.data.Percentage;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.io.IOException;
+import java.net.ServerSocket;
+
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@SpringBootTest(classes = ServiceApplication.class,
-    webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+@SpringBootTest(classes = ServiceApplication.class, webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+@DirtiesContext
 @AutoConfigureMockMvc
 class ServiceControllerTest {
 
+    private final static Logger LOGGER = LoggerFactory.getLogger(ServiceControllerTest.class);
+
+    // Together with @DynamicPropertySource we fetch a random port and use it in the WebClient
+    public static int PORT;
+
+    static {
+        ServerSocket serverSocket;
+        try {
+            serverSocket = new ServerSocket(0);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        PORT = serverSocket.getLocalPort();
+        LOGGER.info("Using WebClient with port {}", PORT);
+    }
+
     @Autowired
     private MockMvc mockMvc;
+
+    // See https://www.baeldung.com/spring-dynamicpropertysource
+    @SuppressWarnings("unused")
+    @DynamicPropertySource
+    static void portProperties(DynamicPropertyRegistry registry) {
+        registry.add("server.port", () -> PORT);
+        registry.add("application.client.port", () -> PORT);
+    }
 
     @ParameterizedTest
     @CsvSource({
@@ -69,5 +103,23 @@ class ServiceControllerTest {
             .andExpect(header().string("Content-Type", MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$").value(value))
         ;
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+        "1000", "2000",
+    })
+    void sleep(long input) throws Exception {
+
+        // arrange
+        long start = System.currentTimeMillis();
+        // act
+        mockMvc.perform(get("/sleep/{input}", input)
+                .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(header().string("Content-Type", MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$").value(input));
+        // assert
+        assertThat(System.currentTimeMillis() - start).isCloseTo(input, Percentage.withPercentage(50));
     }
 }

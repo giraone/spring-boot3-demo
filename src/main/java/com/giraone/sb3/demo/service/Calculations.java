@@ -15,10 +15,9 @@ public class Calculations {
 
     public int fibonacci(int input) {
 
-        final int ret = fibonacciInternal(input);
-        Observation.createNotStarted("demo.calculate", this.observationRegistry)
+        final int ret = Observation.createNotStarted("demo.service.fibonacci", this.observationRegistry)
             .lowCardinalityKeyValue("input", Integer.toString(input))
-            .observe(() -> ret);
+            .observe(() -> fibonacciInternal(input));
         return ret;
     }
 
