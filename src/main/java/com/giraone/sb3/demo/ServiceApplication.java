@@ -39,7 +39,7 @@ public class ServiceApplication {
 	}
 
     @Bean
-    CalculationWebClient calculationWebClient() {
+    WebClient webClient() {
         String host = "127.0.0.1";
         int port = 8080;
         if (applicationProperties.getClient() != null) {
@@ -52,9 +52,13 @@ public class ServiceApplication {
         if (host == null || host.length() == 0) {
             host = "127.0.0.1";
         }
-        WebClient webClient =  WebClient.builder()
+        return WebClient.builder()
             .baseUrl("http://" + host + ":" + port)
             .build();
+    }
+
+    @Bean
+    CalculationWebClient calculationWebClient(WebClient webClient) {
         HttpServiceProxyFactory factory = HttpServiceProxyFactory.builder()
             .clientAdapter(WebClientAdapter.forClient(webClient))
             .build();
