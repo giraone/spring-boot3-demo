@@ -1,7 +1,9 @@
 # Spring Boot 3 Features Demo
 
-Basically the code from
-[Spring Tips: the road to Spring Boot 3: Spring Framework 6](https://spring.io/blog/2022/10/26/spring-tips-the-road-to-spring-boot-3-spring-framework-6).
+Basically inspired by
+- [Spring Tips: "the road to Spring Boot 3: Spring Framework 6"](https://spring.io/blog/2022/10/26/spring-tips-the-road-to-spring-boot-3-spring-framework-6)
+- [OpenValue'S "Switching from Spring Cloud Sleuth to Micrometer Tracing / Micrometer Observation for Spring Boot 3"](https://openvalue.blog/posts/2022/12/16/tracing-in-spring-boot-2-and-3/)
+- [Baeldung's "Observability with Spring Boot 3"](https://www.baeldung.com/spring-boot-3-observability)
 
 ## Shows
 
@@ -13,7 +15,7 @@ Basically the code from
 ## Content
 
 There is one endpoint `/calculate/{input1}[?input2={input2}]` calculating the *fibonacci* value directly for `input1`
-and also indirectly via a REST call to a second endpoint `/calculate2/{input}` one the same service or a remote same
+and also indirectly via a REST call to a second endpoint `/calculate2/{input}` one the same service or a remote
 service of the same type.
 
 ## Tests from Command Line
@@ -40,6 +42,8 @@ curl http://localhost:8080/calculate/10?input2=10
 ```shell
 curl http://localhost:8080/actuator/metrics | jq
 ```
+
+or interactive in browser using http://localhost:8080.
 
 ```json
 {
