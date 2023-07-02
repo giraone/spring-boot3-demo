@@ -66,6 +66,13 @@
       <groupId>io.micrometer</groupId>
       <artifactId>micrometer-registry-prometheus</artifactId>
     </dependency>
+    <!-- To have opentelemetry-javaagent.jar available for setup2 -->
+    <dependency>
+      <groupId>io.opentelemetry.javaagent</groupId>
+      <artifactId>opentelemetry-javaagent</artifactId>
+      <version>${opentelemetry.version}</version>
+      <scope>runtime</scope>
+    </dependency>
     <!-- Micrometer OpenTelemetry Bridge registry for TRACING (Setup 2 only) -->
 <!--    <dependency>
       <groupId>io.micrometer</groupId>
@@ -75,7 +82,7 @@
 <!--    <dependency>-->
 <!--      <groupId>io.opentelemetry</groupId>-->
 <!--      <artifactId>opentelemetry-sdk-extension-autoconfigure</artifactId>-->
-<!--      <version>1.27.0-alpha</version>-->
+<!--      <version>${opentelemetry.version}</version>-->
 <!--    </dependency>-->
     <!-- The specific exporter format is zipkin (Setup 2 only) -->
 <!--    <dependency>
@@ -161,6 +168,31 @@
             </buildpacks>
           </image>
         </configuration>
+      </plugin>
+
+      <!-- Copy OTEL java agent to target -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>copy</goal>
+            </goals>
+            <phase>process-resources</phase>
+            <configuration>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>io.opentelemetry.javaagent</groupId>
+                  <artifactId>opentelemetry-javaagent</artifactId>
+                  <version>${opentelemetry.version}</version>
+                  <type>jar</type>
+                  <outputDirectory>${project.build.directory}</outputDirectory>
+                </artifactItem>
+              </artifactItems>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
 
       <!-- Build docker image -->
