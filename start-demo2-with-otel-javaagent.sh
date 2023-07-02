@@ -14,14 +14,14 @@ export OTEL_TRACES_EXPORTER=none
 export OTEL_LOGS_EXPORTER=none
 
 # this setting is for using an OTEL collector running locally
-# export OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4317
+export OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4317
 
 # these 2 vars and 3 settings are for grafana cloud
 export GRAFANA_INSTANCE_ID="9999999"
 export GRAFANA_API_KEY="the-token-goes-here"
-export OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf
-export OTEL_EXPORTER_OTLP_ENDPOINT='https://otlp-gateway-prod-eu-west-2.grafana.net/otlp'
-export OTEL_EXPORTER_OTLP_HEADERS="Authorization=Basic $(echo -n $GRAFANA_INSTANCE_ID:$GRAFANA_API_KEY | base64 -w 0)"
+#export OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf
+#export OTEL_EXPORTER_OTLP_ENDPOINT='https://otlp-gateway-prod-eu-west-2.grafana.net/otlp'
+#export OTEL_EXPORTER_OTLP_HEADERS="Authorization=Basic $(echo -n $GRAFANA_INSTANCE_ID:$GRAFANA_API_KEY | base64 -w 0)"
 
 # export OTEL_PROPAGATORS=b3
 
