@@ -1,6 +1,7 @@
 # Spring Boot 3 Features Demo
 
 Basically inspired by
+
 - [Spring Tips: "the road to Spring Boot 3: Spring Framework 6"](https://spring.io/blog/2022/10/26/spring-tips-the-road-to-spring-boot-3-spring-framework-6)
 - [OpenValue'S "Switching from Spring Cloud Sleuth to Micrometer Tracing / Micrometer Observation for Spring Boot 3"](https://openvalue.blog/posts/2022/12/16/tracing-in-spring-boot-2-and-3/)
 - [Baeldung's "Observability with Spring Boot 3"](https://www.baeldung.com/spring-boot-3-observability)
@@ -150,7 +151,7 @@ First remove all dependencies of Setup 1 in [pom.xml](pom.xml).
 In Setup 1 metrics were provided by the Spring Boot app using `io.micrometer:micrometer-registry-prometheus`
 and scraped by *Prometheus* (and from there send to *Grafana*). In this Setup 2, the scraping is done by
 the [Open Telemetry Collector].(https://github.com/open-telemetry/opentelemetry-collector) (a Go implementation).
-The Otel Collector’s pipeline has 3 steps: Receivers —> Processors —> Exporters.
+The OTEL Collector’s pipeline has 3 steps: Receivers —> Processors —> Exporters.
 
 - for the receiver, we use `otlp`
 - for the processor, we use `batch`
@@ -177,6 +178,11 @@ java -javaagent:./observability/setup2/opentelemetry-javaagent.jar \
      -jar target/demo-0.0.1-SNAPSHOT.jar`
 ```
 
+## Setup 4
+
+Same as Setup 1, but using [Grafana Agent](https://grafana.com/docs/grafana-cloud/data-configuration/agent/about_agent/)
+to scrape the `actuator/prometheus` endpoints and pass the data to Grafana Cloud.
+
 ---
 
 ## Run the setups
@@ -190,7 +196,7 @@ First you have to build the image for the Spring Boot demo application.
 
 ```shell
 ./mvnw -DskipTests=true package
-podman build --tag=spring-boot3-demo:latest .
+docker build --tag=spring-boot3-demo:latest .
 ```
 
 Start/Stop containers
@@ -198,24 +204,41 @@ Start/Stop containers
 ```shell
 cd observability/setup1
 # Start
-podman-compose up -d
+docker-compose up -d
 # Stop
-podman-compose down
+docker-compose down
 ```
 
-Result
+Result for setup 1
 
 ```
-$ podman ps
-CONTAINER ID  IMAGE                               COMMAND               CREATED        STATUS            PORTS                                             NAMES
-57831ff4959b  docker.io/grafana/tempo:latest      -config.file=/etc...  2 minutes ago  Up 2 minutes ago  0.0.0.0:9411->9411/tcp, 0.0.0.0:42681->14268/tcp  tempo-sb3
-d65bf12a5303  docker.io/grafana/loki:latest       -config.file=/etc...  2 minutes ago  Up 2 minutes ago  0.0.0.0:3100->3100/tcp                            loki-sb3
-b5e83690fb4c  docker.io/prom/prometheus:latest    --enable-feature=...  2 minutes ago  Up 2 minutes ago  0.0.0.0:9090->9090/tcp                            prometheus-sb3
-825fb780b271  docker.io/grafana/grafana:latest                          2 minutes ago  Up 2 minutes ago  0.0.0.0:3000->3000/tcp                            grafana-sb3
-f04037417875  localhost/spring-boot3-demo:latest                        2 minutes ago  Up 2 minutes ago  0.0.0.0:8080->8080/tcp                            demo1-sb3
-54d491ee7da2  localhost/spring-boot3-demo:latest                        2 minutes ago  Up 2 minutes ago  0.0.0.0:8081->8080/tcp                            demo2-sb3
+$ docker ps
+CONTAINER ID   IMAGE             COMMAND                  CREATED          STATUS          PORTS                    NAMES
+8660c442fd91   grafana/grafana   "/run.sh"                14 seconds ago   Up 11 seconds   0.0.0.0:3000->3000/tcp   grafana-sb3
+eee20e7917e1   prom/prometheus   "/bin/prometheus --e…"   14 seconds ago   Up 11 seconds   0.0.0.0:9090->9090/tcp   prometheus-sb3
+34b87d1db40e   grafana/loki      "/usr/bin/loki -conf…"   14 seconds ago   Up 13 seconds   0.0.0.0:3100->3100/tcp   loki-sb3
 ```
 
+Result for setup 2
+
+```
+$ docker ps
+CONTAINER ID   IMAGE                                  COMMAND                  CREATED              STATUS              PORTS                                                                                                  N
+AMES
+7ee958402ada   grafana/tempo                          "/tempo -config.file…"   About a minute ago   Up About a minute   0.0.0.0:3200->3200/tcp                                                                                 t
+empo-sb3
+ca45cb5e1205   spring-boot3-demo                      "java -jar /app.jar …"   About a minute ago   Up About a minute   0.0.0.0:8081->8080/tcp                                                                                 d
+emo2-sb3
+365ad14b786d   spring-boot3-demo                      "java -jar /app.jar …"   About a minute ago   Up About a minute   0.0.0.0:8080->8080/tcp                                                                                 d
+emo1-sb3
+4f0ae1737c84   grafana/grafana                        "/run.sh"                About a minute ago   Up About a minute   0.0.0.0:3000->3000/tcp                                                                                 g
+rafana-sb3
+6d5fffe214e4   grafana/loki                           "/usr/bin/loki -conf…"   About a minute ago   Up About a minute   0.0.0.0:3100->3100/tcp                                                                                 l
+oki-sb3
+63fdd6e8da9d   otel/opentelemetry-collector-contrib   "/otelcol-contrib --…"   About a minute ago   Up About a minute   0.0.0.0:4317-4318->4317-4318/tcp, 0.0.0.0:13133->13133/tcp, 55678-55679/tcp, 0.0.0.0:13888->8888/tcp   o
+tel-sb3
+                                                      loki-sb3
+```
 ### Check Services for Readiness
 
 - Spring Boot Service 1:
@@ -229,8 +252,8 @@ f04037417875  localhost/spring-boot3-demo:latest                        2 minute
   - [UI](http://localhost:9090/) - Use e.g. `demo_calculate_seconds_sum` as a query
   - [Management API Dokumentation](https://prometheus.io/docs/prometheus/latest/management_api/)
 - Tempo:
-  - Readiness: `curl http://localhost:3200/ready` ==> *ready*. If it is *Ingester not ready: ingester check ready failed waiting for 15s after being ready
-*, then wait.
+  - Readiness: `curl http://localhost:3200/ready` ==> *ready*. If the message is *Ingester not ready: ingester check ready failed waiting for 15s after being ready
+*, then wait some seconds.
   - Port für Ingest: `curl http://localhost:9411/` ==> *unexpected end of JSON input*
   - [API Dokumentation](https://grafana.com/docs/tempo/latest/api_docs/)
 - LOKI:
@@ -245,6 +268,10 @@ f04037417875  localhost/spring-boot3-demo:latest                        2 minute
 - VictoriaMetrics:
   - [UI](http://localhost:8428/)
   - Readiness: `curl http://localhost:8428/metrics` ==> *List of metrics*
+- OTEL Collector
+  - Readiness: `curl http://localhost:13133/heath/status` ==> `{"status":"Server available","upSince":"2023-07-01T16:17:40.248631996Z","uptime":"3m43.492991139s"}`
+  - Readiness API may be customized - see https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/main/extension/healthcheckextension/README.md
+  - Metrics: `curl http://localhost:13888/metrics` ==> Prometheus metrics
 
 ### Perform some client calls
 
