@@ -19,6 +19,7 @@
     <java.version>17</java.version>
     <maven.compiler.source>17</maven.compiler.source>
     <maven.compiler.target>17</maven.compiler.target>
+    <loki-logback-appender.version>1.4.1</loki-logback-appender.version>
     <opentelemetry.version>1.27.0</opentelemetry.version>
     <junit.jupiter.version>5.9.2</junit.jupiter.version>
     <assertj.version>3.24.2</assertj.version>
@@ -60,27 +61,31 @@
     </dependency>
 
     <!-- OBSERVABILITY -->
-    <!-- Micrometer Prometheus registry for METRICS (Setup 1 only) -->
+    <!-- Micrometer Prometheus registry for METRICS (Setup 1 only or to expose additionally the prometheus endpoint) -->
     <dependency>
       <groupId>io.micrometer</groupId>
       <artifactId>micrometer-registry-prometheus</artifactId>
     </dependency>
-    <!-- Micrometer OpenTelemetry Bridge registry for TRACING (Setup 1 only) -->
-<!--    <dependency>-->
-<!--      <groupId>io.micrometer</groupId>-->
-<!--      <artifactId>micrometer-tracing-bridge-otel</artifactId>-->
-<!--    </dependency>-->
-    <!-- OpenTelemetry API and Autoconfigure to export TRACING in various formats (Setup 1 only) -->
+    <!-- Micrometer OpenTelemetry Bridge registry for TRACING (Setup 2 only) -->
+<!--    <dependency>
+      <groupId>io.micrometer</groupId>
+      <artifactId>micrometer-tracing-bridge-otel</artifactId>
+    </dependency>-->
+    <!-- OpenTelemetry API and Autoconfigure to export TRACING in various formats (Setup 2 only) -->
 <!--    <dependency>-->
 <!--      <groupId>io.opentelemetry</groupId>-->
 <!--      <artifactId>opentelemetry-sdk-extension-autoconfigure</artifactId>-->
-<!--      <version>1.19.0-alpha</version>-->
+<!--      <version>1.27.0-alpha</version>-->
 <!--    </dependency>-->
-    <!-- The specific exporter format is zipkin (Setup 1 only) -->
-<!--    <dependency>-->
-<!--      <groupId>io.opentelemetry</groupId>-->
-<!--      <artifactId>opentelemetry-exporter-zipkin</artifactId>-->
-<!--    </dependency>-->
+    <!-- The specific exporter format is zipkin (Setup 2 only) -->
+<!--    <dependency>
+      <groupId>io.opentelemetry</groupId>
+      <artifactId>opentelemetry-exporter-zipkin</artifactId>
+    </dependency>-->
+<!--    <dependency>
+      <groupId>io.opentelemetry</groupId>
+      <artifactId>opentelemetry-exporter-otlp</artifactId>
+    </dependency>-->
     <!-- Must be on the class path for Spring Application Content for tests! -->
     <!--
     <dependency>
@@ -88,11 +93,11 @@
       <artifactId>opentelemetry-exporter-otlp</artifactId>
     </dependency>-->
     <!-- Direct usage of Grafana LOKI by using its appender for LOGGING -->
-<!--    <dependency>-->
-<!--      <groupId>com.github.loki4j</groupId>-->
-<!--      <artifactId>loki-logback-appender</artifactId>-->
-<!--      <version>1.3.2</version>-->
-<!--    </dependency>-->
+    <dependency>
+      <groupId>com.github.loki4j</groupId>
+      <artifactId>loki-logback-appender</artifactId>
+      <version>${loki-logback-appender.version}</version>
+    </dependency>
 
     <!-- TOOLING -->
     <dependency>
@@ -253,4 +258,18 @@
     </pluginRepository>
   </pluginRepositories>
 
+  <profiles>
+    <profile>
+      <!-- a profile with a directly used log appender for loki -->
+      <id>loki</id>
+      <dependencies>
+        <!-- Direct usage of Grafana LOKI by using its appender for LOGGING -->
+        <dependency>
+          <groupId>com.github.loki4j</groupId>
+          <artifactId>loki-logback-appender</artifactId>
+          <version>${loki-logback-appender.version}</version>
+        </dependency>
+      </dependencies>
+    </profile>
+  </profiles>
 </project>
