@@ -3,8 +3,6 @@
 server:
   http_listen_port: 3200
 
-search_enabled: true
-
 distributor:
   # Receivers for zipkin and otlp (we omit jaeger)
   receivers:
@@ -15,6 +13,7 @@ distributor:
   log_received_spans:
     enabled: true
 
+# TODO: Solution based on minio!
 storage:
   trace:
     backend: local
