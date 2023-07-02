@@ -1,0 +1,43 @@
+extensions:
+  health_check:
+    endpoint: '0.0.0.0:13133' # this is the default, exposed on path "/health/status"
+  zpages:
+    endpoint: '0.0.0.0:55679' # additional output to check receivers/exporters traces, exposed on "/debug/tracez"
+
+receivers:
+  otlp:
+    protocols:
+      grpc:
+      http:
+
+processors:
+  batch:
+    send_batch_size: 8192 # default
+    timeout: '200ms' # default
+    send_batch_max_size: 0 # default = no upper limit
+
+exporters:
+  logging:
+    verbosity: detailed
+  otlphttp:
+    # endpoint: 'localhost:54317' # mapped to tempo-sb3:4317
+    endpoint: 'http://localhost:54318' # mapped to tempo-sb3:4318
+
+service:
+  # OTEL collectors own telemetry
+  telemetry:
+    # logging
+    logs:
+      level: 'debug'
+    # prometheus metrics exposed on path "/metrics"
+    metrics:
+     address: ':8888'
+
+  pipelines:
+    metrics:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [otlphttp,logging]
+
+  # we want a health check
+  extensions: [health_check,zpages]
