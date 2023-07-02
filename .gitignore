@@ -1,5 +1,6 @@
 **/tempo-data/
 **/victoria-metrics-data/
+**/minio/data/
 
 target/
 !.mvn/wrapper/maven-wrapper.jar
