@@ -9,9 +9,18 @@
     <include resource="org/springframework/boot/logging/logback/base.xml" />
     <springProperty scope="context" name="appName" source="spring.application.name"/>
 
+    <!-- See https://loki4j.github.io/loki-logback-appender/docs/configuration -->
     <appender name="LOKI" class="com.github.loki4j.logback.Loki4jAppender">
       <http>
-        <url>http://localhost:3100/loki/api/v1/push</url>
+        <!-- local loki -->
+        <!-- <url>http://localhost:3100/loki/api/v1/push</url> -->
+        <!-- Grafana cloud loki -->
+        <url>https://logs-prod-012.grafana.net/loki/api/v1/push</url>
+        <auth>
+          <!-- replace with real username/token -->
+          <username>999999</username>
+          <password>the-base64-token-goes-here</password>
+        </auth>
       </http>
       <format>
         <label>
