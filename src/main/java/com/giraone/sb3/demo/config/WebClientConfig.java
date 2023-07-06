@@ -1,6 +1,7 @@
 package com.giraone.sb3.demo.config;
 
 import com.giraone.sb3.demo.service.CalculationWebClient;
+import io.micrometer.observation.ObservationRegistry;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -17,7 +18,12 @@ public class WebClientConfig {
     }
 
     @Bean
-    WebClient webClient() {
+    ObservationRegistry observationRegistry() {
+        return ObservationRegistry.create();
+    }
+
+    @Bean
+    WebClient webClient(ObservationRegistry observationRegistry) {
         String host = "127.0.0.1";
         int port = 8080;
         if (applicationProperties.getClient() != null) {
@@ -32,6 +38,7 @@ public class WebClientConfig {
         }
         return WebClient.builder()
             .baseUrl("http://" + host + ":" + port)
+            .observationRegistry(observationRegistry)
             .build();
     }
 
