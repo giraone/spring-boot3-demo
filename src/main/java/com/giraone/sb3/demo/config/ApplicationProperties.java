@@ -12,7 +12,7 @@ import java.util.Set;
  * </p>
  */
 @Component
-@ConfigurationProperties(prefix = "application", ignoreUnknownFields = true) // TODO: false not working
+@ConfigurationProperties(prefix = "application")
 public class ApplicationProperties {
 
     /** Log the configuration to the log on startup */
