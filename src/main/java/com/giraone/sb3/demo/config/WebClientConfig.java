@@ -33,7 +33,7 @@ public class WebClientConfig {
         if (port == 0) {
             port = 8080;
         }
-        if (host == null || host.length() == 0) {
+        if (host == null || host.isEmpty()) {
             host = "127.0.0.1";
         }
         return WebClient.builder()
@@ -42,11 +42,11 @@ public class WebClientConfig {
             .build();
     }
 
+    // Just an example for "HTTP Interfaces in Spring " - see https://docs.spring.io/spring-framework/reference/integration/rest-clients.html#rest-http-interface
     @Bean
     CalculationWebClient calculationWebClient(WebClient webClient) {
-        HttpServiceProxyFactory factory = HttpServiceProxyFactory.builder()
-            .clientAdapter(WebClientAdapter.forClient(webClient))
-            .build();
+        WebClientAdapter adapter = WebClientAdapter.create(webClient);
+        HttpServiceProxyFactory factory = HttpServiceProxyFactory.builderFor(adapter).build();
         return factory.createClient(CalculationWebClient.class);
     }
 }

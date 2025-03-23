@@ -219,26 +219,18 @@ eee20e7917e1   prom/prometheus   "/bin/prometheus --e…"   14 seconds ago   Up 
 34b87d1db40e   grafana/loki      "/usr/bin/loki -conf…"   14 seconds ago   Up 13 seconds   0.0.0.0:3100->3100/tcp   loki-sb3
 ```
 
-Result for setup 2
+Result for setup 2 (docker)
 
 ```
-$ docker ps
-CONTAINER ID   IMAGE                                  COMMAND                  CREATED              STATUS              PORTS                                                                                                  N
-AMES
-7ee958402ada   grafana/tempo                          "/tempo -config.file…"   About a minute ago   Up About a minute   0.0.0.0:3200->3200/tcp                                                                                 t
-empo-sb3
-ca45cb5e1205   spring-boot3-demo                      "java -jar /app.jar …"   About a minute ago   Up About a minute   0.0.0.0:8081->8080/tcp                                                                                 d
-emo2-sb3
-365ad14b786d   spring-boot3-demo                      "java -jar /app.jar …"   About a minute ago   Up About a minute   0.0.0.0:8080->8080/tcp                                                                                 d
-emo1-sb3
-4f0ae1737c84   grafana/grafana                        "/run.sh"                About a minute ago   Up About a minute   0.0.0.0:3000->3000/tcp                                                                                 g
-rafana-sb3
-6d5fffe214e4   grafana/loki                           "/usr/bin/loki -conf…"   About a minute ago   Up About a minute   0.0.0.0:3100->3100/tcp                                                                                 l
-oki-sb3
-63fdd6e8da9d   otel/opentelemetry-collector-contrib   "/otelcol-contrib --…"   About a minute ago   Up About a minute   0.0.0.0:4317-4318->4317-4318/tcp, 0.0.0.0:13133->13133/tcp, 55678-55679/tcp, 0.0.0.0:13888->8888/tcp   o
-tel-sb3
-                                                      loki-sb3
+t.b.d
 ```
+
+Use setup2 locally with Grafana Cloud
+
+```
+./otelcol-contrib.exe --config=file:./otel-collector-pull-cloud.yaml
+```
+
 ### Check Services for Readiness
 
 - Spring Boot Service 1:
@@ -262,6 +254,9 @@ tel-sb3
     --data-urlencode \
     'query=sum(rate({job="varlogs"}[10m])) by (level)' | jq`
   - [API Dokumentation](https://grafana.com/docs/loki/latest/api/)
+- Mimir
+  - [UI](http://localhost:58080/)
+  - Status: http://localhost:58080/services
 - Grafana:
   - [UI](http://localhost:3000/)
   - [API Dokumentation](https://grafana.com/docs/grafana/latest/developers/http_api/)
