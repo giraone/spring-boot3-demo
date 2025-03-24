@@ -7,6 +7,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Mono;
+
+import java.time.Duration;
 
 @RestController
 public class ServiceController {
@@ -64,16 +67,10 @@ public class ServiceController {
         }
     )
     @GetMapping("sleep/{input}")
-    int sleep(@PathVariable int input) {
-
+    public Mono<Integer> sleep(@PathVariable int input) {
         if (input < 0) {
             input = 0;
         }
-        try {
-            Thread.sleep(input);
-        } catch (InterruptedException e) {
-            return -1;
-        }
-        return input;
+        return Mono.delay(Duration.ofMillis(input)).then(Mono.just(input));
     }
 }

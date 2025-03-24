@@ -1,6 +1,7 @@
 package com.giraone.sb3.demo.controller.filter;
 
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.lang.NonNull;
 import org.springframework.web.filter.AbstractRequestLoggingFilter;
 
 public class SimpleRequestLoggingFilter extends AbstractRequestLoggingFilter {
@@ -20,7 +21,7 @@ public class SimpleRequestLoggingFilter extends AbstractRequestLoggingFilter {
      * Writes a log message before the request is processed.
      */
     @Override
-    protected void beforeRequest(HttpServletRequest request, String message) {
+    protected void beforeRequest(@NonNull HttpServletRequest request, @NonNull String message) {
         logger.debug(message);
     }
 
@@ -28,6 +29,7 @@ public class SimpleRequestLoggingFilter extends AbstractRequestLoggingFilter {
      * Writes a log message after the request is processed.
      */
     @Override
-    protected void afterRequest(HttpServletRequest request, String message) {
+    protected void afterRequest(@NonNull HttpServletRequest request, @NonNull  String message) {
+        // Intentionally left blank
     }
 }

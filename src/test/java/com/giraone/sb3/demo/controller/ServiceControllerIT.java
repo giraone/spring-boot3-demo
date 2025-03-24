@@ -11,7 +11,6 @@ import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWeb
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.http.ProblemDetail;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.reactive.server.WebTestClient;
@@ -22,7 +21,6 @@ import java.net.ServerSocket;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(classes = ServiceApplication.class, webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-@DirtiesContext
 @AutoConfigureWebTestClient
 class ServiceControllerIT {
 
